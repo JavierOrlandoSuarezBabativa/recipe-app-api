@@ -8,7 +8,7 @@ from django.db.utils import OperationalError
 from django.core.management.base import BaseCommand
 
 class Command(BaseCommand):
-    """Django command to wait fot database"""
+    """Django command to wait for database"""
 
     def handle(self, *args, **options):
         """Entrypoint for command"""
@@ -18,9 +18,11 @@ class Command(BaseCommand):
 
         while db_up is False:
             try:
+                """This database is mention inside setting.py"""
                 self.check(databases=['default'])
                 db_up = True
             except (Psycopg20Error, OperationalError):
                 self.stdout.write('Database unavailable, waiting 1 second...')
                 time.sleep(1)
+
         self.stdout.write(self.style.SUCCESS('Database available!'))
